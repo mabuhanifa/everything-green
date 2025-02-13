@@ -7,7 +7,7 @@ await connectDB();
 
 export async function GET(request) {
   try {
-    const users = await User.find({});
+    const users = await User.find({}).select("-password");
     return NextResponse.json(users);
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 401 });
@@ -18,7 +18,7 @@ export async function POST(request) {
   try {
     const { name, email, password } = await request.json();
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email }).select("-password");
     if (existingUser) {
       return NextResponse.json(
         { message: "User already exists" },
