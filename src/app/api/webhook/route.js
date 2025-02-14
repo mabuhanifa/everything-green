@@ -1,12 +1,10 @@
-// app/api/webhook/route.js
 import fs from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
 
 const validateSignature = (req) => {
   const signature = req.headers.get("x-signature");
-  const expectedSignature =
-    "c58341e3906304975b508b6ae770ee4db549abe550e47b547248db12d06ccce4";
+  const expectedSignature = process.env.WEBHOOK_SECRET || "1234abcd";
   return signature === expectedSignature;
 };
 
