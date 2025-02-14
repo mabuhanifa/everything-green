@@ -1,5 +1,6 @@
 import User from "@/app/models/User";
 import connectDB from "@/utils/db";
+import { generateToken } from "@/utils/jwt";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
@@ -8,7 +9,8 @@ await connectDB();
 export async function GET(request) {
   try {
     const users = await User.find({}).select("-password");
-    return NextResponse.json(users);
+    const token = generateToken(users._id);
+    return NextResponse.json({ users, token });
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 401 });
   }
